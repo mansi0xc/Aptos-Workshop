@@ -35,14 +35,10 @@ module MyModule::Procurement {
     }
     
     /// Assign approver role to an account
-    public fun assign_approver_role(admin: &signer, approver_address: address) {
+    public fun assign_approver_role(admin: &signer, approver: &signer) {
         let admin_addr = signer::address_of(admin);
         assert!(admin_addr == @MyModule, error::permission_denied(E_NOT_AUTHORIZED));
-        
-        let approver_signer = account::create_signer_with_capability(
-            &account::create_test_signer_cap(approver_address)
-        );
-        move_to(&approver_signer, ApproverRole {});
+        move_to(approver, ApproverRole {});
     }
     
     /// Create a new procurement request
